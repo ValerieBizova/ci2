@@ -26,11 +26,9 @@ Answer: 144674200
 
 pushing A04 folder into my GitHub repository:
 
-$ git add .
+$ git add -A
 
-git commit -m "Add A04 assignment"
+$ git commit -m "A04: Add assignment files and update CSV locations"
 
-git push
-
-
+$ git push
 
