@@ -3,6 +3,7 @@
 
 
 \## cloning my GitHub repository:
+
 $ git clone git@github.com:ValerieBizova/ci2.git
 $ cd ci2
 
