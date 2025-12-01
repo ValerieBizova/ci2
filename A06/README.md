@@ -6,8 +6,6 @@
 $ git clone git@github.com:ValerieBizova/ci2.git
 $ cd ci2
 
-$ cd A06
-
 
 
 \## installing jupyter, notebook and panda:
@@ -17,8 +15,6 @@ $ python -m pip install jupyter
 $ python -m pip install notebook
 
 $ python -m pip install pandas matplotlib
-
-
 
 
 
@@ -34,13 +30,11 @@ $ python graph.py
 
 
 
-
-
-pushing A04 folder into my GitHub repository:
+\## pushing A06 folder into my GitHub repository:
 
 $ git add -A
 
-$ git commit -m "A04: Add assignment files and update CSV locations"
+$ git commit -m "Add assignment A06"
 
 $ git push
 
