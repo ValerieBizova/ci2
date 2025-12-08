@@ -50,5 +50,5 @@ $ git add A07
 
 $ git commit -m "Add assignment A07"
 
-$ git push
+$ git push origin main
 
