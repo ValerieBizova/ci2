@@ -2,10 +2,12 @@
 
 ## cloning my GitHub repository:
 $ git clone https://github.com/ValerieBizova/ci2.git
+
 $ cd ci2/A08
 
 ## creating a virtual environment:
 $ python -m venv venv
+
 $ source venv/Scripts/activate
 
 ## installing required Python packages:
@@ -59,5 +61,7 @@ Structure
 
 ## pushing A08 folder into my GitHub repository:
 $ git add A08
+
 $ git commit -m "Add assignment A08"
+
 $ git push origin main
