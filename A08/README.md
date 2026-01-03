@@ -1,102 +1,63 @@
 # Assignment A08 - Flask ChEMBL Search
 
-
-
 ## cloning my GitHub repository:
-
-```
 $ git clone https://github.com/ValerieBizova/ci2.git
 $ cd ci2/A08
-```
-
-
 
 ## creating a virtual environment:
+$ python -m venv venv
+$ source venv/Scripts/activate
 
-```
-$ python -m venv .venv
-$ .venv\Scripts\Activate.ps1
-```
+## installing required Python packages:
+$ pip install flask chembl_webresource_client
 
-
-
-## installing required packages:
-
-```
-$ pip install -r requirements.txt
-```
-
-this will install Flask, chembl-webresource-client, and Werkzeug
-
-
+## freezing dependencies:
+$ pip freeze > requirements.txt
 
 ## running the Flask application:
-
-```
 $ python app.py
-```
-
-the server will start on http://localhost:5000
-```
-
 
 ## using the web application:
 
-open web browser and navigate to http://localhost:5000
+1. open web browser and type http://127.0.0.1:5000
+2. enter SMILES in the input field
+3. click the "Search" button
 
-enter SMILES notation in the input field (e.g., OC(=O)CC(O)C(=O)O for malic acid)
+-> compound information is now displayed on the page
 
-click "Search ChEMBL Database" button
-
-view compound information displayed on the page
-
-perform new searches by entering different SMILES strings
-
-
+4. perform new searches by entering different SMILES in the input field
 
 ## example output for "malic acid":
 
-SMILES input: OC(=O)CC(O)C(=O)O
+SMILES input: O=C(O)CC(O)C(=O)O
 
+General Information
 
-ChEMBL ID: CHEMBL225986
+    ChEMBL ID: CHEMBL1455497
+    Name: Malic Acid
+    Synonyms: Apple Acid, D,L-Malic Acid, Dl-Malic Acid...
+    Molecular Formula: C4H6O5
+    Molecular Weight: 134.09
+    Molecule Type: Small molecule
 
-Preferred Name: N/A
+Identifiers
 
-Molecule Type: Small molecule
+    SMILES: O=C(O)CC(O)C(=O)O
+    InChI: InChI=1S/C4H6O5/c5-2(4(8)9)1-3(6)7/h2,5H,1H2,(H,6,7)(H,8,9)
+    InChIKey: BJEPYKJPYRNKOW-UHFFFAOYSA-N
 
-Max Phase: N/A
+Calculated Properties
 
-Molecular Formula: C4H6O5
+    LogP (ALogP): -1.09
+    H-Bond Acceptors: 3
+    H-Bond Donors: 3
+    Polar Surface Area: 94.83
+    Heavy Atoms: 9
+    Rule of 5 Violations: 0
 
-Molecular Weight: 134.09
-
-ALogP: -1.09
-
-H-Bond Acceptors: 3
-
-H-Bond Donors: 3
-
-Polar Surface Area: 94.83
-
-Rotatable Bonds: 3
-
-Ro5 Violations: 0
-
-Synonyms: N/A
-
-Canonical SMILES: O=C(O)C[C@@H](O)C(=O)O
-
-InChI Key: BJEPYKJPYRNKOW-UWTATZPHSA-N
-
-Standard InChI: InChI=1S/C4H6O5/c5-2(4(8)9)1-3(6)7/h2,5H,1H2,(H,6,7)(H,8,9)/t2-/m1/s1
-
-
+Structure
 
 ## pushing A08 folder into my GitHub repository:
-
-```
 $ git add A08
 $ git commit -m "Add assignment A08"
 $ git push origin main
-```
