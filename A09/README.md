@@ -1,67 +1,109 @@
-# Assignment A08 - Flask ChEMBL Search
+# Assignment A09 - Flask ChEMBL Search with 3D POV-Ray Rendering
+
+## overview:
+
+This project is a single-page chemistry web server that allows users to enter a SMILES string and retrieve:
+
+Compound information from ChEMBL (name, formula, weight, synonyms, etc.)
+
+A 3D image of the molecule generated locally using Open Babel + POV-Ray
+
+
+## necessary to run:
+
+WSL (Ubuntu recommended) on Windows
+
+Python 3.12
+
+Open Babel (obabel)
+
+POV-Ray (povray)
+
 
 ## cloning my GitHub repository:
+
 $ git clone https://github.com/ValerieBizova/ci2.git
 
-$ cd ci2/A08
+$ cd ci2/A09
+
+
+## setting up the Linux Environment (Windows WSL):
+
+1. Open PowerShell
+2. Run as Administrator
+3. wsl --install -d Ubuntu
+
+
+## moving the project to the Linux Environment (Windows WSL):
+
+$ mkdir -p ~/ci2
+
+$ cp -r /mnt/c/Users/BizovaV/ci2/A09 ~/ci2/
+
+$ cd ~/ci2/A09
+
 
 ## creating a virtual environment:
-$ python -m venv venv
 
-$ source venv/Scripts/activate
+$ python3 -m venv venv_wsl
+
+$ source venv_wsl/bin/activate
+
 
 ## installing required Python packages:
+
+$ pip install --upgrade pip
+
 $ pip install flask chembl_webresource_client
 
-## freezing dependencies:
-$ pip freeze > requirements.txt
+$ pip install -r requirements.txt
+
+
+## installing required Linux applications (WSL/Ubuntu):
+
+$ sudo apt update
+
+$ sudo apt install openbabel povray povray-includes
+
+
+## setting up the static folder and include file:
+
+$ mkdir -p static
+
+$ cp /usr/share/openbabel/*/babel_povray3.inc ./static/
+
 
 ## running the Flask application:
+
 $ python app.py
+
 
 ## using the web application:
 
-1. open web browser and type http://127.0.0.1:5000
-2. enter SMILES in the input field
-3. click the "Search" button
+    Open web browser and type: http://127.0.0.1:5000
 
--> compound information is now displayed on the page
+    Enter a SMILES string in the input field (e.g., CCO or C1=CC=CC=C1).
 
-4. perform new searches by entering different SMILES in the input field
+    Click the "Search" button.
 
-## example output for "malic acid":
+-> New Functionality: The page no longer reloads. A JavaScript API request fetches the data and updates the page dynamically.
 
-SMILES input: O=C(O)CC(O)C(=O)O
+    View the compound information along with both the 2D Structure (from ChEMBL) and the 3D Rendered Image (created by POV-Ray).
 
-General Information
 
-    ChEMBL ID: CHEMBL1455497
-    Name: Malic Acid
-    Synonyms: Apple Acid, D,L-Malic Acid, Dl-Malic Acid...
-    Molecular Formula: C4H6O5
-    Molecular Weight: 134.09
-    Molecule Type: Small molecule
+## pushing A09 folder into my GitHub repository:
 
-Identifiers
+$ git add A09
 
-    SMILES: O=C(O)CC(O)C(=O)O
-    InChI: InChI=1S/C4H6O5/c5-2(4(8)9)1-3(6)7/h2,5H,1H2,(H,6,7)(H,8,9)
-    InChIKey: BJEPYKJPYRNKOW-UHFFFAOYSA-N
+$ git commit -m "Add assignment A09: Single-page JS API and POV-Ray 3D rendering"
 
-Calculated Properties
+$ git push origin master
 
-    LogP (ALogP): -1.09
-    H-Bond Acceptors: 3
-    H-Bond Donors: 3
-    Polar Surface Area: 94.83
-    Heavy Atoms: 9
-    Rule of 5 Violations: 0
 
-Structure
+## switching from master to main branch:
 
-## pushing A08 folder into my GitHub repository:
-$ git add A08
+$ git checkout main
 
-$ git commit -m "Add assignment A08"
+$ git merge master
 
 $ git push origin main
