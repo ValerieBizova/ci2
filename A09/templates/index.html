@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChEMBL Search - 3D Edition</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 1100px; margin: auto; }
+        
+        h1 { margin-bottom: 15px; color: #2a7ae2; }
+        
+        .funny-line { color: #444; font-size: 1.05em; margin-bottom: 12px; font-weight: 500; }
+
+        .search-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input[type="text"] { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background-color: #2a7ae2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #1e5bb8; }
+        
+        /* resultWrapper starts hidden */
+        .result-wrapper { display: none; gap: 30px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .info-column { flex: 2; }
+        .structure-column { flex: 1; text-align: center; border-left: 1px solid #eee; padding-left: 20px; }
+        
+        .block { margin-bottom: 25px; }
+        .block h3 { border-bottom: 2px solid #2a7ae2; padding-bottom: 5px; color: #2a7ae2; font-size: 1.1em; margin-top: 0; }
+        
+        ul { list-style: none; padding: 0; }
+        li { display: flex; margin-bottom: 8px; font-size: 1em; line-height: 1.4; }
+        .label { font-weight: bold; min-width: 185px; color: #555; flex-shrink: 0; }
+        .value { word-break: break-all; flex-grow: 1; }
+
+        .structure-column img { max-width: 100%; height: auto; margin-top: 5px; border-radius: 4px; border: 1px solid #f0f0f0; }
+        .structure-label { font-size: 0.9em; color: #666; margin-bottom: 15px; display: block; }
+        #error { color: #d9534f; font-weight: bold; margin-bottom: 15px; display: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>ChEMBL Chemical Search</h1>
+    
+    <p class="funny-line">
+        <i>Enter a SMILES and get all the information you might need</i> 🔍
+    </p>
+
+    <div class="search-box">
+        <input type="text" id="smilesInput" placeholder="Enter SMILES string (e.g., CCO)...">
+        <button onclick="searchMolecule()">Search</button>
+    </div>
+
+    <div id="error"></div>
+
+    <div class="result-wrapper" id="resultWrapper">
+        <div class="info-column">
+            <div class="block">
+                <h3>General Information</h3>
+                <ul>
+                    <li><span class="label">ChEMBL ID:</span> <span class="value" id="resID"></span></li>
+                    <li><span class="label">Name:</span> <span class="value" id="resName"></span></li>
+                    <li><span class="label">Synonyms:</span> <span class="value" id="resSyn"></span></li>
+                    <li><span class="label">Molecular Formula:</span> <span class="value" id="resFormula"></span></li>
+                    <li><span class="label">Molecular Weight:</span> <span class="value" id="resWeight"></span></li>
+                    <li><span class="label">Molecule Type:</span> <span class="value" id="resType"></span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <h3>Identifiers</h3>
+                <ul>
+                    <li><span class="label">SMILES:</span> <span class="value" id="resSmiles"></span></li>
+                    <li><span class="label">InChI:</span> <span class="value" id="resInchi"></span></li>
+                    <li><span class="label">InChIKey:</span> <span class="value" id="resInchiKey"></span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <h3>Calculated Properties</h3>
+                <ul>
+                    <li><span class="label">LogP (ALogP):</span> <span class="value" id="resLogP"></span></li>
+                    <li><span class="label">H-Bond Acceptors:</span> <span class="value" id="resHBA"></span></li>
+                    <li><span class="label">H-Bond Donors:</span> <span class="value" id="resHBD"></span></li>
+                    <li><span class="label">Polar Surface Area:</span> <span class="value" id="resPSA"></span></li>
+                    <li><span class="label">Heavy Atoms:</span> <span class="value" id="resHeavy"></span></li>
+                    <li><span class="label">Rule of 5 Violations:</span> <span class="value" id="resRO5"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="structure-column">
+            <div class="block">
+                <h3>2D Structure</h3>
+                <img id="img2D" src="" alt="2D Representation">
+                <span class="structure-label">ChEMBL API SVG</span>
+            </div>
+            
+            <div class="block">
+                <h3>3D Render</h3>
+                <img id="img3D" src="" alt="3D Representation">
+                <span class="structure-label">POV-Ray Ray-traced PNG</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function searchMolecule() {
+    const smiles = document.getElementById('smilesInput').value;
+    const errorDiv = document.getElementById('error');
+    const resultWrapper = document.getElementById('resultWrapper');
+    
+    // Reset View
+    errorDiv.style.display = "none";
+    errorDiv.innerText = "";
+
+    if (!smiles.trim()) {
+        errorDiv.innerText = "Please enter a SMILES string.";
+        errorDiv.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch('/process', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ smiles: smiles })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Populate Text Fields
+            document.getElementById('resID').innerText = data.chembl_id;
+            document.getElementById('resName').innerText = data.name;
+            document.getElementById('resSyn').innerText = data.synonyms;
+            document.getElementById('resWeight').innerText = data.weight;
+            document.getElementById('resType').innerText = data.type;
+            document.getElementById('resSmiles').innerText = data.smiles;
+            document.getElementById('resInchi').innerText = data.inchi;
+            document.getElementById('resInchiKey').innerText = data.inchikey;
+            document.getElementById('resLogP').innerText = data.alogp;
+            document.getElementById('resHBA').innerText = data.hba;
+            document.getElementById('resHBD').innerText = data.hbd;
+            document.getElementById('resPSA').innerText = data.psa;
+            document.getElementById('resHeavy').innerText = data.heavy_atoms;
+            document.getElementById('resRO5').innerText = data.ro5_violations;
+
+            // Handle Subscripts in Formula
+            const formulaHtml = data.formula.replace(/(\d+)/g, '<sub>$1</sub>');
+            document.getElementById('resFormula').innerHTML = formulaHtml;
+
+            // Update 2D Image from ChEMBL
+            document.getElementById('img2D').src = `https://www.ebi.ac.uk/chembl/api/data/image/${data.chembl_id}.svg`;
+
+            // Update 3D Image from Flask Static Folder (with cache buster)
+            document.getElementById('img3D').src = data.image_url + "?t=" + new Date().getTime();
+
+            // Reveal Result Wrapper
+            resultWrapper.style.display = "flex";
+        } else {
+            errorDiv.innerText = data.error || "Search failed.";
+            errorDiv.style.display = "block";
+            resultWrapper.style.display = "none";
+        }
+    } catch (err) {
+        errorDiv.innerText = "Connection error: Server may be offline.";
+        errorDiv.style.display = "block";
+    }
+}
+</script>
+</body>
+</html>
