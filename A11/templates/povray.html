@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>POV-Ray 3D Render</h1>
+    <div class="search-box">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="smiles" placeholder="Enter SMILES string (e.g. CCO)..." required>
+            <button type="submit">Render</button>
+        </form>
+    </div>
+
+    {% if image_url %}
+    <div class="result-wrapper">
+        <div class="structure-column" style="border:none; width:100%;">
+            <h3>3D Render</h3>
+            <img src="{{ image_url }}" alt="3D Representation">
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

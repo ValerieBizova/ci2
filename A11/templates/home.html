@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>ChEMBL Chemical Search</h1>
+    <p class="funny-line"><i>Welcome! This portal allows you to explore chemical data and generate 3D molecular visualizations.</i></p>
+    
+    <div style="display: flex; gap: 20px; margin-top: 30px;">
+        <div class="search-box" style="flex: 1; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="color: #2a7ae2;">🧪 ChEMBL Database</h3>
+                <p>Search for molecule information, identifiers, and calculated properties directly from the ChEMBL web service.</p>
+            </div>
+            <a href="{% url 'chembl' %}">
+                <button style="width: 100%;">Go to Search</button>
+            </a>
+        </div>
+
+        <div class="search-box" style="flex: 1; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="color: #2a7ae2;">📸 3D POV-Ray Render</h3>
+                <p>Generate high-quality 3D molecular renders from SMILES strings using OpenBabel and POV-Ray.</p>
+            </div>
+            <a href="{% url 'povray' %}">
+                <button style="width: 100%;">Go to Renderer</button>
+            </a>
+        </div>
+    </div>
+{% endblock %}

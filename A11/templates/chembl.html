@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>ChEMBL Chemical Search</h1>
+    <div class="search-box">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="smiles" placeholder="Enter SMILES string (e.g. CCO)..." required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    {% if data %}
+    <div class="result-wrapper">
+        <div class="info-column">
+            <div class="block">
+                <h3>General Information</h3>
+                <ul>
+                    <li><span class="label">ChEMBL ID:</span> <span class="value">{{ data.chembl_id }}</span></li>
+                    <li><span class="label">Name:</span> <span class="value">{{ data.name }}</span></li>
+                    <li><span class="label">Synonyms:</span> <span class="value">{{ data.synonyms }}</span></li>
+                    <li><span class="label">Molecular Formula:</span> <span class="value">{{ data.formula }}</span></li>
+                    <li><span class="label">Molecular Weight:</span> <span class="value">{{ data.weight }}</span></li>
+                    <li><span class="label">Molecule Type:</span> <span class="value">{{ data.type }}</span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <h3>Identifiers</h3>
+                <ul>
+                    <li><span class="label">SMILES:</span> <span class="value">{{ data.smiles }}</span></li>
+                    <li><span class="label">InChI:</span> <span class="value">{{ data.inchi }}</span></li>
+                    <li><span class="label">InChIKey:</span> <span class="value">{{ data.inchikey }}</span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <h3>Calculated Properties</h3>
+                <ul>
+                    <li><span class="label">LogP (ALogP):</span> <span class="value">{{ data.alogp }}</span></li>
+                    <li><span class="label">H-Bond Acceptors:</span> <span class="value">{{ data.hba }}</span></li>
+                    <li><span class="label">H-Bond Donors:</span> <span class="value">{{ data.hbd }}</span></li>
+                    <li><span class="label">Polar Surface Area:</span> <span class="value">{{ data.psa }}</span></li>
+                    <li><span class="label">Heavy Atoms:</span> <span class="value">{{ data.heavy_atoms }}</span></li>
+                    <li><span class="label">Rule of 5 Violations:</span> <span class="value">{{ data.ro5_violations }}</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="structure-column">
+            <div class="block">
+                <h3>2D Structure</h3>
+                <img src="https://www.ebi.ac.uk/chembl/api/data/image/{{ data.chembl_id }}.svg" alt="2D Representation">
+                <span class="structure-label">ChEMBL API SVG</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
